@@ -4,7 +4,7 @@ library;
 import 'dart:math';
 import 'dart:io';
 
-import 'package:dart_resymot_client/client_scara.dart';
+import 'package:dart_resymot_client/src/client_scara.dart';
 import 'package:test/test.dart';
 
 void main() {
