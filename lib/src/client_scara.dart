@@ -1,8 +1,8 @@
-export 'package:dart_resymot_client/jsonrpc_client.dart' show ServerProxy;
+export 'package:dart_resymot_client/src/jsonrpc_client.dart' show ServerProxy;
 import 'dart:async';
 import 'dart:math';
 
-import 'package:dart_resymot_client/jsonrpc_client.dart';
+import 'package:dart_resymot_client/src/jsonrpc_client.dart';
 
 class ResymotSCARA {
   late int machineId;

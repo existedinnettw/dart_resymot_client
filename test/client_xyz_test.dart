@@ -4,7 +4,7 @@ library;
 import 'dart:math';
 import 'dart:io';
 
-import 'package:dart_resymot_client/client_xyz.dart';
+import 'package:dart_resymot_client/src/client_xyz.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -242,7 +242,11 @@ void main() {
   test(
     'testJog',
     wrap(() async {
-      await setStrtLine(xyz);
+      await xyz
+          .straightMoveTo(endPt: [0.4, 0, 0.1], feedRate: feedRate, corrId: 0)
+          .then((value) {
+            expect(value, equals(true));
+          });
       await waitComplete(xyz);
       await Future.delayed(Duration(milliseconds: 100));
 
@@ -252,12 +256,16 @@ void main() {
       await xyz.setToJogMode().then((value) {
         expect(value, equals(true));
       });
-      List<double> targetPos = [0.4, 0.0, 0.1];
 
-      double step = 0.1;
+      List<double> targetPos = await xyz.getCurrentPos();
+      //List<double> targetPos = [0.4, 0.0, 0.1];
+      print(targetPos);
+
+      double step = 0.01;
       //smulate human jog cmd
       for (int i = 0; i < 10; i++) {
         targetPos[0] += step;
+        print("${targetPos[0]}, ${targetPos[1]}, ${targetPos[2]}");
         await xyz.setTargetPos(endPt: targetPos).then((value) {
           expect(value, equals(true));
         });
@@ -266,6 +274,7 @@ void main() {
 
       for (int i = 0; i < 10; i++) {
         targetPos[0] -= step;
+        print("${targetPos[0]}, ${targetPos[1]}, ${targetPos[2]}");
         await xyz.setTargetPos(endPt: targetPos).then((value) {
           expect(value, equals(true));
         });
@@ -290,4 +299,31 @@ void main() {
       });
     }),
   );
+
+  test('testSwitchToJogModeAfterHome', () async {
+    await xyz.powerOff().then((value) {
+      expect(value, equals(true));
+    });
+    await xyz.setToHomeMode().then((value) {
+      expect(value, equals(true));
+    });
+    await xyz.startToHoming().then((value) {
+      expect(value, equals(true));
+    });
+    await xyz.powerOff().then((value) {
+      expect(value, equals(true));
+    });
+    await xyz.setToJogMode().then((value) {
+      expect(value, equals(true));
+    });
+    await xyz.powerOff().then((value) {
+      expect(value, equals(true));
+    });
+    await xyz.getCurrentPos().then((value) {
+      expect(value, isA<List<double>>());
+      expect(value[0], lessThan(0.05));
+      expect(value[1], lessThan(0.05));
+      expect(value[2], lessThan(0.05));
+    });
+  });
 }

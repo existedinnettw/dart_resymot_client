@@ -1,8 +1,9 @@
-export 'package:dart_resymot_client/jsonrpc_client.dart' show ServerProxy;
+export 'package:dart_resymot_client/src/jsonrpc_client.dart' show ServerProxy;
 import 'dart:async';
 import 'dart:math';
+import 'dart:convert';
 
-import 'package:dart_resymot_client/jsonrpc_client.dart';
+import 'package:dart_resymot_client/src/jsonrpc_client.dart';
 
 class ResymotXYZ {
   late int machineId;
@@ -100,5 +101,17 @@ class ResymotXYZ {
   Future<bool> waitComplete() async {
     var result = await client.call('${prefix}_wait_complete');
     return result == true;
+  }
+
+  Future<List<double>> getCurrentPos() async {
+    var raw = await client.call('${prefix}_curr_pos');
+    //List<dynamic> raw = jsonDecode(str);
+    List<double> result = raw.map((e) => e.toDouble()).toList().cast<double>();
+    print(result);
+    //if (result is List<double>) {
+    return result;
+    //} else {
+    //  throw Exception('Expected List<double>, got $result');
+    //}
   }
 }
