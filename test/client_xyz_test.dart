@@ -3,7 +3,7 @@ library;
 
 import 'dart:math';
 import 'dart:io';
-
+import 'package:dotenv/dotenv.dart';
 import 'package:dart_resymot_client/src/client_xyz.dart';
 import 'package:test/test.dart';
 
@@ -12,15 +12,14 @@ void main() {
   dynamic proxy;
   late double feedRate;
 
-  final Map defaultEnvs = {
-    "RESYMOT_SERVER":
-        Platform.environment['RESYMOT_SERVER'], //http://127.0.0.1:8383/
-    "FEED_RATE": double.tryParse(Platform.environment['FEED_RATE'] ?? ''),
-  };
-
   setUp(() {
-    proxy = ServerProxy(defaultEnvs["RESYMOT_SERVER"]);
-    feedRate = defaultEnvs["FEED_RATE"];
+    var env = DotEnv(includePlatformEnvironment: true)..load();
+    if (!env.isEveryDefined(['RESYMOT_SERVER', 'FEED_RATE'])) {
+      exit(1); // exit if env not set
+    }
+    var url = env["RESYMOT_SERVER"] ?? "http://127.0.0.1:8383/";
+    feedRate = double.tryParse(env["FEED_RATE"]!) ?? 0.6;
+    proxy = ServerProxy(url);
     xyz = ResymotXYZ(pClient: proxy, pMachineId: 1);
   });
 

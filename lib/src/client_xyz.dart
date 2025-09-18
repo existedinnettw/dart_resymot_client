@@ -107,7 +107,7 @@ class ResymotXYZ {
     var raw = await client.call('${prefix}_curr_pos');
     //List<dynamic> raw = jsonDecode(str);
     List<double> result = raw.map((e) => e.toDouble()).toList().cast<double>();
-    print(result);
+    // print(result);
     //if (result is List<double>) {
     return result;
     //} else {

@@ -10,6 +10,8 @@ environment:
 dependencies:
   jsonrpc2: ^3.0.1
   http: ^0.13.1
+  dotenv: ^4.2.0
+  meta: ^1.16.0
   # path: ^1.8.0
 
 dev_dependencies:
