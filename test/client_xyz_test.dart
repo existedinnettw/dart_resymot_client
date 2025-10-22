@@ -1,4 +1,5 @@
 @Timeout(Duration(seconds: 60))
+@Tags(['xyz'])
 library;
 
 import 'dart:math';
@@ -236,7 +237,7 @@ void main() {
     await xyz2.powerOff().then((value) {
       expect(value, equals(true));
     });
-  });
+  }, tags: ['dual']);
 
   test(
     'testJog',
@@ -297,6 +298,7 @@ void main() {
         expect(value, equals(true));
       });
     }),
+    tags: ['home'],
   );
 
   test('testSwitchToJogModeAfterHome', () async {
@@ -324,5 +326,5 @@ void main() {
       expect(value[1], lessThan(0.05));
       expect(value[2], lessThan(0.05));
     });
-  });
+  }, tags: ['home']);
 }
